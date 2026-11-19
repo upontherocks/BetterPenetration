@@ -687,7 +687,7 @@ namespace Core_BetterPenetration
                 AdjustDanToTargetKokan(targetAgent, twoDans);
             else if (m_referenceTarget.name == LookTargets.AnaTarget || m_referenceTarget.name == LookTargets.BPAnaTarget)
                 AdjustDanToTargetAna(targetAgent, twoDans);
-            else if (m_referenceTarget.name == LookTargets.HeadTarget || m_referenceTarget.name == LookTargets.HeadTarget2)
+            else if (IsHeadTarget(m_referenceTarget.name))
                 AdjustDanToTargetHead(targetAgent, twoDans);
             else
                 AdjustDanToTargetNull(targetAgent);
@@ -847,7 +847,7 @@ namespace Core_BetterPenetration
                     else
                         danEndTarget = ConstrainDanToBody(targetAgent, danStart, danTargetVector, danLength);
                 }
-                else if (m_referenceTarget.name == LookTargets.HeadTarget || m_referenceTarget.name == LookTargets.HeadTarget2)
+                else if (IsHeadTarget(m_referenceTarget.name))
                 {
                     if (m_danOptions.simplifyOral && m_bpDanPointsFound)
                         danEndTarget = innerLimit;
@@ -965,6 +965,16 @@ namespace Core_BetterPenetration
 #if HS2 || AI
             RemoveMidsectionColliders(secondTarget.m_collisionCharacter);
             RemoveDanCollidersFromDB2(secondTarget.m_collisionCharacter);
+#endif
+        }
+
+        // HeadTarget2 only exists for HS2/AI; the KK targets have a single head target
+        private static bool IsHeadTarget(string targetName)
+        {
+#if HS2 || AI
+            return targetName == LookTargets.HeadTarget || targetName == LookTargets.HeadTarget2;
+#else
+            return targetName == LookTargets.HeadTarget;
 #endif
         }
 
